@@ -1,2 +1,3 @@
 # mush-pit
-low-poly third-person shooter made in Unity
+Low-poly third-person shooter made in Unity.\n
+Made in early 2021.
