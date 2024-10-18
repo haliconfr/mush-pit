@@ -1,0 +1,69 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class cameraMove : MonoBehaviour
+{
+    public Transform mc;
+    public GameObject mcObj;
+    public Transform head;
+    public float sens, mouseX, mouseY;
+    public bool zoom;
+    public GameObject variables;
+    public bool stop;
+    public float speed;
+
+    void Start()
+    {
+        transform.LookAt(mc);
+    }
+
+    private void LateUpdate()
+    {
+        float rotateHorizontal = Input.GetAxis("Mouse X");
+        float rotateVertical = Input.GetAxis("Mouse Y");
+        transform.RotateAround(mc.transform.position, -Vector3.up, rotateHorizontal * sens);
+        transform.RotateAround(mc.transform.position, transform.right, rotateVertical * sens);
+    }
+    void Update()
+    {
+        //mouseX += Input.GetAxis("Mouse X") * sens;
+        //mouseY -= Input.GetAxis("Mouse Y") * sens;
+        //mouseY = Mathf.Clamp(mouseY, -35, 60);
+
+        //if (Input.GetKey(KeyCode.LeftShift))
+        //{
+        //    mc.rotation = Quaternion.Euler(mouseY, mouseX, 0);
+        //}
+        //else
+        //{
+        //    mc.rotation = Quaternion.Euler(mouseY, mouseX, 0);
+        //    mc.rotation = Quaternion.Euler(0, mouseX, 0);
+        //}
+        sens = variables.GetComponent<variables>().sensitivity;
+        //mouse inputs
+        float horizontal = Input.GetAxisRaw("Horizontal") * 5.0f;
+        float vertical = Input.GetAxisRaw("Vertical") * 5.0f;
+        Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized;
+        float targetangle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+        float turnSmoothVelocity = 0;
+        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetangle, ref turnSmoothVelocity, 0.1f);
+        transform.rotation = Quaternion.Euler(0f, angle, 0f);
+        float yClamp = gameObject.transform.localEulerAngles.y;
+        if (yClamp < 270)
+        {
+            if (yClamp > 90) yClamp = 90;
+        }
+        head.localEulerAngles = new Vector3(head.localEulerAngles.x, yClamp, head.localEulerAngles.z);
+        zoom = this.gameObject.GetComponent<cameraZoom>().zoomed;
+        if (!zoom)
+        {
+            sens = variables.GetComponent<variables>().sensitivity;
+        }
+        else
+        {
+            sens = 0.5f;
+        }
+    }
+}
