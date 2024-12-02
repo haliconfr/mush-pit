@@ -134,3 +134,5 @@ WHATSNEW*          text
 *.meta linguist-generated
 *.prefab linguist-generated
 *.unity linguist-generated
+*.shader linguist-vendored=true
+*.cginc linguist-vendored=true
